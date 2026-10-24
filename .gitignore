@@ -1,0 +1,98 @@
+# =============================================================================
+#  VidGraphRAG .gitignore
+# =============================================================================
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ----- Virtualenvs -----
+.venv/
+venv/
+env/
+ENV/
+
+# ----- IDE / Editor -----
+.idea/
+.vscode/
+.qoder/
+.claude/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ----- Logs / Temp -----
+*.log
+log.txt
+*.tmp
+*.bak
+*.orig
+
+# ----- Project caches & runtime artifacts -----
+cache_*_example/
+videorag-workdir/
+videorag_cache_*/
+.checkpoints/
+
+# ----- Storage runtime data (chat sessions, KV, vector DB, graphs) -----
+# NOTE: storage/*.json (incl. config.json with API keys) must NEVER be tracked.
+storage/chat-*/
+storage/*.json
+storage/amgl/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# ----- Model checkpoints (large binaries) -----
+storage/imagebind_huge/
+MiniCPM-V-2_6-int4/
+faster-distil-whisper-large-v3/
+*.pth
+*.bin
+*.safetensors
+
+# ----- Test fixtures (large media) -----
+tests/*.mp4
+tests/*.mkv
+tests/*.avi
+tests/*.wav
+tests/*.mp3
+
+# ----- LongerVideos dataset (downloaded by users) -----
+longervideos/videorag-workdir/
+longervideos/videorag-answers/
+longervideos/*.zip
+
+# ----- Reproduce experiments (downloaded answers) -----
+reproduce/all_answers/
+reproduce/*.zip
+
+# ----- Node / Electron (Vimo-desktop) -----
+Vimo-desktop/node_modules/
+Vimo-desktop/dist/
+Vimo-desktop/out/
+Vimo-desktop/.electron-builder.cache/
+
+# ----- Engine-publish exclusions (桌面端与上游 VideoRAG 论文门面，非纯引擎内容) -----
+Vimo-desktop/
+notesbooks/
+longervideos/
+reproduce/
+examples/
+VideoRAG.png
+VideoRAG_cover.png
+videorag_longervideos.py

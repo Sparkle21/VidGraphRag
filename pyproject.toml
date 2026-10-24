@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vidgraphrag"
+version = "0.1.0"
+description = "Omni-modal video RAG engine with Shot-Segment dual-layer architecture (headless CLI/server)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "VidGraphRAG Authors" }]
+keywords = ["video-rag", "multimodal", "knowledge-graph", "retrieval-augmented-generation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# 核心依赖：纯文本 + BM25 + 图谱通路即可运行（无 GPU 环境降级模式）
+dependencies = [
+    "openai>=1.35",
+    "tiktoken",
+    "nano-vectordb",
+    "networkx",
+    "numpy",
+    "tenacity",
+    "xxhash",
+    "python-dotenv",
+    "httpx",
+    "tqdm",
+]
+
+[project.optional-dependencies]
+# 视频处理：分镜检测 / 切片 / 关键帧
+video = [
+    "moviepy",
+    "scenedetect",
+    "Pillow",
+]
+# 视觉通路与本地 VLM/ASR：ImageBind 统一嵌入（需 GPU 或大内存 CPU）
+imagebind = [
+    "torch",
+    "imagebind @ git+https://github.com/facebookresearch/ImageBind.git",
+    "transformers",
+]
+# 云端 ASR（阿里云百炼/DashScope 语音转写）
+asr = [
+    "dashscope",
+]
+# HNSW 多模态向量索引
+hnsw = ["hnswlib"]
+# Neo4j 图存储（默认 NetworkX 本地存储）
+neo4j = ["neo4j"]
+# Headless HTTP 服务
+server = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+]
+# Agent 记忆与 Loop 组件：无需视频/GPU 依赖
+amgl = ["pydantic>=2.7,<3"]
+# 隔离基准的 API/准入进程树资源采集；不增加组件运行时依赖
+benchmark = ["psutil>=5.9"]
+# 离线组件测试与 HTTP 冒烟测试
+test = ["pydantic>=2.7,<3", "pytest>=8", "pytest-asyncio>=0.23", "fastapi>=0.110", "uvicorn>=0.29", "httpx>=0.27"]
+# 推荐组合：完整的视频全模态索引能力
+full = [
+    "vidgraphrag[video,imagebind,asr,hnsw,server]",
+]
+
+[project.scripts]
+vidgraphrag = "vidgraphrag.cli:main"
+amgl = "amgl.server:main"
+amgl-worker = "amgl.memory.admission.worker:main"
+
+[tool.setuptools.packages.find]
+include = ["vidgraphrag*", "amgl*"]
